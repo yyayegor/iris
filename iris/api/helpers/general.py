@@ -689,9 +689,6 @@ def launch_firefox(path, profile=None, url=None, args=None):
     if args is None:
         args = []
 
-    if profile is None:
-        raise APIHelperError('No profile name present, aborting run.')
-
     args.append('-foreground')
     args.append('-no-remote')
 

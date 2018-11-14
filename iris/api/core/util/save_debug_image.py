@@ -49,6 +49,7 @@ def save_debug_image(needle, haystack, locations, not_found=False):
     :param not_found: boolean if image was found or not.
     :return: None.
     """
+    return
     test_name = IrisCore.get_test_name()
 
     if test_name is not None:
