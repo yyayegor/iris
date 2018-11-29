@@ -38,7 +38,6 @@ class Test(BaseTest):
         Expected result: 
         - Firefox successfully restarts. 
         - The private browsing session is not restored.
-        
         '''
 
     def run(self):
@@ -77,4 +76,3 @@ class Test(BaseTest):
                          'Browser console was closed successfully')
         except FindError:
             raise FindError('Browser console was not closed')
-
