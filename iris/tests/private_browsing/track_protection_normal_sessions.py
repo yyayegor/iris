@@ -17,7 +17,7 @@ class Test(BaseTest):
 
     def setup(self):
         BaseTest.setup(self)
-        self.profile = Profile.BRAND_NEW
+        self.profile = Profile.LIKE_NEW
 
         return
 
@@ -53,8 +53,8 @@ class Test(BaseTest):
         # Access the following website
         new_tab()
         navigate('https://edition.cnn.com')
-        website_displayed = exists(cnn_site_logo_pattern, 5)
+        website_displayed = exists(cnn_site_logo_pattern, 10)
         assert_true(self, website_displayed, 'The Website is successfully displayed')
-        tracking_protection_shield_displayed = exists(tracking_protection_shield_pattern, 3)
+        tracking_protection_shield_displayed = exists(tracking_protection_shield_pattern, 10)
         assert_true(self, tracking_protection_shield_displayed,
                     'The Tracking Protection shield is displayed near the address bar')
