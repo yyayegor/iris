@@ -44,7 +44,8 @@ class Test(BaseTest):
         preferences_privacy_find_field_pattern = Pattern('preferences_privacy_find_field.png')
         master_password_box_is_checked_pattern = Pattern('master_password_box_is_checked.png')
         master_password_box_is_unchecked_pattern = Pattern('master_password_box_is_unchecked.png')
-        ok_button_available_in_change_master_password_pattern = Pattern('ok_button_available_in_change_master_password.png')
+        ok_button_available_in_change_master_password_pattern = \
+            Pattern('ok_button_available_in_change_master_password.png')
         button_ok_password_change_succeeded_pattern = Pattern('button_ok_password_change_succeeded.png')
         password_change_succeeded_pattern = Pattern('password_change_succeeded.png')
         remove_button_available_in_change_master_password_pattern = \
@@ -87,10 +88,11 @@ class Test(BaseTest):
         assert_true(self, password_change_succeeded,
                     'Password change succeeded.')
         available_button_ok_password_change_succeeded = exists(button_ok_password_change_succeeded_pattern, 30)
+        #location to prevent multiple occurrences of OK button
+        button_ok_password_change_succeeded_location = find(button_ok_password_change_succeeded_pattern)
         assert_true(self, available_button_ok_password_change_succeeded,
                     'Button OK is available.')
-        hover(button_ok_password_change_succeeded_pattern, 0.3)
-        click(button_ok_password_change_succeeded_pattern)
+        click(button_ok_password_change_succeeded_location)
 
         master_password_box_is_checked = exists(master_password_box_is_checked_pattern, 30)
         assert_true(self, master_password_box_is_checked,
@@ -131,10 +133,12 @@ class Test(BaseTest):
         master_password_deleted = exists(master_password_deleted_pattern, 20)
         assert_true(self, master_password_deleted,
                     'Master password deleted.')
-        #  click ok button
+
         available_button_ok_password_change_succeeded = exists(button_ok_password_change_succeeded_pattern, 30)
         assert_true(self, available_button_ok_password_change_succeeded,
                     'Button OK is available.')
+        hover(button_ok_password_change_succeeded_pattern, 0.2)
+        click(button_ok_password_change_succeeded_pattern)
 
         unchecked_use_master_password_checkbox_exists = exists(master_password_box_is_unchecked_pattern, 20)
         assert_true(self, unchecked_use_master_password_checkbox_exists,
