@@ -103,7 +103,7 @@ class Test(BaseTest):
         assert_true(self, new_tab_is_opened, 'New tab is opened')
 
         navigate('about:preferences#privacy')
-        navigated_to_preferences = exists(preferences_privacy_find_field_pattern, 20)
+        navigated_to_preferences = exists(preferences_privacy_find_field_pattern, 20) 
         assert_true(self, navigated_to_preferences,
                     'Preferences/privacy page successfully loaded.')
 
