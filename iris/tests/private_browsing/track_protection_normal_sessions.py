@@ -53,7 +53,7 @@ class Test(BaseTest):
         # Access the following website
         new_tab()
         navigate('https://edition.cnn.com')
-        website_displayed = exists(cnn_site_logo_pattern, 20)
+        website_displayed = exists(cnn_site_logo_pattern, 30)
         assert_true(self, website_displayed, 'The Website is successfully displayed')
         tracking_protection_shield_displayed = exists(tracking_protection_shield_pattern, 10)
         assert_true(self, tracking_protection_shield_displayed,
