@@ -31,7 +31,7 @@ class Test(BaseTest):
 
         # Access the about:preferences#privacy page
         navigate('about:preferences#privacy')
-        privacy_prefs_page_displayed = exists(privacy_prefs_page_pattern, 3)
+        privacy_prefs_page_displayed = exists(privacy_prefs_page_pattern, 20)
         assert_true(self, privacy_prefs_page_displayed, "The privacy preferences page is successfully displayed")
 
         # Enable the "Always" option from the Tracking Protection section
@@ -53,7 +53,7 @@ class Test(BaseTest):
         # Access the following website
         new_tab()
         navigate('https://edition.cnn.com')
-        website_displayed = exists(cnn_site_logo_pattern, 10)
+        website_displayed = exists(cnn_site_logo_pattern, 20)
         assert_true(self, website_displayed, 'The Website is successfully displayed')
         tracking_protection_shield_displayed = exists(tracking_protection_shield_pattern, 10)
         assert_true(self, tracking_protection_shield_displayed,
