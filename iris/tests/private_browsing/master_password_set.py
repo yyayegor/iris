@@ -10,33 +10,10 @@ class Test(BaseTest):
 
     def __init__(self):
         BaseTest.__init__(self)
-        self.meta = 'The "Never remember history" settings remain valid after reopening the browser from the dock'
-        self.test_case_id = '120453'
+        self.meta = 'Master Password can be set in Private Browsing'
+        self.test_case_id = '101671'
         self.test_suite_id = '1826'
         self.locales = ['en-US']
-
-        '''
-        Test Area
-        Interaction (scroll and zoom) 
-        
-        1        Launch Firefox.        
-        Expected result: Firefox launches without any issues.
-        
-        2        Open a new private browsing window.        
-        Expected result: The private browsing tab is displayed.
-        
-        3        Access the about:preferences#privacy page from the Private Browsing window.        
-        Expected result: The page is successfully displayed.
-        
-        4        Check the Use a Master Password checkbox.        
-        Expected result: The box is checked and the Change Master Password window is displayed.
-        
-        5        Enter a Master Password and click the OK button.        
-        Expected result: The Master Password is successfully added.
-        
-        6        Access the about:preferences#privacy page from the Normal Browsing tab.        
-        Expected result: The Use a Master Password checkbox is checked and the Master Password is activated.
-        '''
 
     def run(self):
         private_browsing_pattern = Pattern('private_browsing_icon.png')
@@ -63,7 +40,7 @@ class Test(BaseTest):
         assert_true(self, navigated_to_preferences,
                     'Preferences/privacy page successfully loaded.')
 
-        paste('Use a Master Password')
+        paste('Use a master password')
         unchecked_use_master_password_checkbox_exists = exists(master_password_box_is_unchecked_pattern, 20)
         assert_true(self, unchecked_use_master_password_checkbox_exists,
                     'Master Password checkbox is unchecked.')
@@ -88,11 +65,10 @@ class Test(BaseTest):
         assert_true(self, password_change_succeeded,
                     'Password change succeeded.')
         available_button_ok_password_change_succeeded = exists(button_ok_password_change_succeeded_pattern, 30)
-        #location to prevent multiple occurrences of OK button
-        button_ok_password_change_succeeded_location = find(button_ok_password_change_succeeded_pattern)
+        #  location to prevent multiple occurrences of OK button
         assert_true(self, available_button_ok_password_change_succeeded,
                     'Button OK is available.')
-        click(button_ok_password_change_succeeded_location)
+        type(Key.ENTER)
 
         master_password_box_is_checked = exists(master_password_box_is_checked_pattern, 30)
         assert_true(self, master_password_box_is_checked,
@@ -102,7 +78,8 @@ class Test(BaseTest):
         #  enter normal mode
         new_tab()
         new_tab_is_opened = exists(new_tab_pattern, 20)
-        assert_true(self, new_tab_is_opened, 'New tab is opened')
+        assert_true(self, new_tab_is_opened,
+                    'New tab is opened')
 
         navigate('about:preferences#privacy')
         navigated_to_preferences = exists(preferences_privacy_find_field_pattern, 20) 
@@ -143,4 +120,3 @@ class Test(BaseTest):
         unchecked_use_master_password_checkbox_exists = exists(master_password_box_is_unchecked_pattern, 20)
         assert_true(self, unchecked_use_master_password_checkbox_exists,
                     'Master Password checkbox is unchecked.')
-
