@@ -22,7 +22,7 @@ class Test(BaseTest):
         return
 
     def run(self):
-        privacy_prefs_page_pattern = Pattern('about_preferences_privacy_adress.png')
+        privacy_prefs_page_pattern = Pattern('about_preferences_privacy_address.png')
         always_block_trackers_not_selected_pattern = Pattern('always_block_trackers_not_selected.png')
         always_block_trackers_selected_pattern = Pattern('always_block_trackers_not_selected.png')
         privacy_and_security_tab_pattern = Pattern('privacy_and_security_tab.png')
