@@ -59,10 +59,11 @@ class Test(BaseTest):
         devtools_label_exists = exists(devtools_label_pattern, 20)
         assert_true(self, devtools_label_exists, 'Devtools exists.')
 
-        if Settings.is_windows():
-            click(devtools_label_pattern)
+        devtools_object = find(devtools_label_pattern)
+        devtools_location = Location(devtools_object.x + 10, devtools_object.y + 1)
+        click(devtools_location)
 
-        double_click(devtools_label_pattern)
+        double_click(devtools_location)
         type(Key.F4, KeyModifier.SHIFT)
 
         scratchpad_opened = exists(run_button_pattern, 5)
