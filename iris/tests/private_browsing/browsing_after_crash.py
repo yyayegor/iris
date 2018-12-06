@@ -24,7 +24,6 @@ class Test(BaseTest):
         restart_firefox_button_pattern = Pattern('restart_firefox_button.png')
         soap_wikipedia_header_label_pattern = Pattern('soap_wikipedia_header_label.png')
         accept_the_risk_button_pattern = Pattern('accept_the_risk_button.png')
-        toggle_item_pattern = Pattern('toggle_item.png')
 
         restart_firefox(self,
                         self.browser.path,
@@ -59,12 +58,8 @@ class Test(BaseTest):
         devtools_label_exists = exists(devtools_label_pattern, 20)
         assert_true(self, devtools_label_exists, 'Devtools exists.')
 
-        right_click(devtools_label_pattern)
-
-        toggle_item_exists = exists(toggle_item_pattern, 5)
-        assert_true(self, toggle_item_exists, 'Toggle menu item exists')
-
-        click(toggle_item_pattern)
+        hover(devtools_label_pattern)
+        double_click(devtools_label_pattern)
 
         type(Key.F4, KeyModifier.SHIFT)
 
