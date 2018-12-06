@@ -24,7 +24,7 @@ class Test(BaseTest):
         restart_firefox_button_pattern = Pattern('restart_firefox_button.png')
         soap_wikipedia_header_label_pattern = Pattern('soap_wikipedia_header_label.png')
         accept_the_risk_button_pattern = Pattern('accept_the_risk_button.png')
-        crash_reporter_icon_pattern = Pattern('crash_reporter_icon.png')
+        toggle_item_pattern = Pattern('toggle_item.png')
 
         restart_firefox(self,
                         self.browser.path,
@@ -59,11 +59,13 @@ class Test(BaseTest):
         devtools_label_exists = exists(devtools_label_pattern, 20)
         assert_true(self, devtools_label_exists, 'Devtools exists.')
 
-        devtools_object = find(devtools_label_pattern)
-        devtools_location = Location(devtools_object.x + 10, devtools_object.y + 1)
-        click(devtools_location)
+        right_click(devtools_label_pattern)
 
-        double_click(devtools_location)
+        toggle_item_exists = exists(toggle_item_pattern, 5)
+        assert_true(self, toggle_item_exists, 'Toggle menu item exists')
+
+        click(toggle_item_pattern)
+
         type(Key.F4, KeyModifier.SHIFT)
 
         scratchpad_opened = exists(run_button_pattern, 5)
@@ -74,6 +76,7 @@ class Test(BaseTest):
         click(run_button_pattern)
 
         if Settings.is_windows():
+            crash_reporter_icon_pattern = Pattern('crash_reporter_icon.png')
             crash_reporter_icon_exists = exists(crash_reporter_icon_pattern, 15)
             assert_true(self, crash_reporter_icon_exists, 'Crash Reporter icon exists')
             click(crash_reporter_icon_pattern)
