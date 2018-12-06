@@ -24,6 +24,8 @@ class Test(BaseTest):
         firefox_icon_dock_pattern = Pattern('firefox_logo_dock.png')
         wiki_soap_history_icon_pattern = Pattern('wiki_soap_history_icon.png')
 
+        dock_region = Region(0, 0.8 * SCREEN_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
+
         restart_firefox(self,
                         self.browser.path,
                         Profile.LIKE_NEW,
@@ -44,7 +46,7 @@ class Test(BaseTest):
         firefox_icon_dock_exists = exists(firefox_icon_dock_pattern, 5)
         assert_true(self, firefox_icon_dock_exists, 'The Firefox icon is still visible in the dock.')
 
-        click(firefox_icon_dock_pattern)
+        click(firefox_icon_dock_pattern, in_region=dock_region)
 
         new_window_item_exists = exists(new_tab_label_pattern, 5)
         assert_true(self, new_window_item_exists, 'New window menu item exists.')
