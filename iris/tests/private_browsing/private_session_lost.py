@@ -14,7 +14,16 @@ class Test(BaseTest):
         self.test_case_id = '107721'
         self.test_suite_id = '1826'
         self.locales = ['en-US']
+
+    def setup(self):
+        """Test case setup
+
+        This overrides the setup method in the BaseTest class, so that it can use a brand new profile.
+        """
+        BaseTest.setup(self)
         self.profile = Profile.LIKE_NEW
+
+        return
 
     def run(self):
 
