@@ -36,6 +36,7 @@ class Test(BaseTest):
         assert_true(self, soap_label_exists, 'The page is successfully loaded.')
 
         close_window()
+        confirm_close_multiple_tabs()
 
         window_closed = exists(soap_label_pattern, 1)
         assert_false(self, window_closed, 'The window is closed')
