@@ -18,7 +18,6 @@ class Test(BaseTest):
     def setup(self):
         BaseTest.setup(self)
         self.profile = Profile.LIKE_NEW
-
         return
 
     def run(self):
@@ -38,23 +37,26 @@ class Test(BaseTest):
         always_block_trackers_not_selected_displayed = exists(always_block_trackers_not_selected_pattern, 3)
         if always_block_trackers_not_selected_displayed:
             click(always_block_trackers_not_selected_pattern)
-
         else:
             raise FindError('Can not find "Always" option from the Tracking Protection')
+
         privacy_and_security_tab_displayed = exists(privacy_and_security_tab_pattern, 3)
         if privacy_and_security_tab_displayed:
             click(privacy_and_security_tab_pattern)
         else:
             raise FindError('Can not find "Privacy and Security" tab')
+
         always_block_trackers_selected_displayed = exists(always_block_trackers_selected_pattern, 3)
         assert_true(self, always_block_trackers_selected_displayed,
                     '"Always" option from the Tracking Protection section is enabled')
 
-        # Access the following website
+        # Access the website
         new_tab()
         navigate('https://edition.cnn.com')
+
         website_displayed = exists(cnn_site_logo_pattern, 30)
         assert_true(self, website_displayed, 'The Website is successfully displayed')
+
         tracking_protection_shield_displayed = exists(tracking_protection_shield_pattern, 10)
         assert_true(self, tracking_protection_shield_displayed,
                     'The Tracking Protection shield is displayed near the address bar')
