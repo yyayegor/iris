@@ -14,7 +14,16 @@ class Test(BaseTest):
         self.test_case_id = '114844'
         self.test_suite_id = '68'
         self.locales = ['en-US']
+
+    def setup(self):
+        """Test case setup
+
+        This overrides the setup method in the BaseTest class, so that it can use a brand new profile.
+        """
+        BaseTest.setup(self)
         self.profile = Profile.LIKE_NEW
+
+        return
 
     def run(self):
         url_first = LocalWeb.FIREFOX_TEST_SITE
@@ -29,7 +38,7 @@ class Test(BaseTest):
         click(restore_previous_session_unchecked_pattern, 0.5)
         checkbox_restore_previous_session_checked = exists(restore_previous_session_checked_pattern)
         assert_true(self, checkbox_restore_previous_session_checked,
-                    '"Restore previous session" checked.')
+                    '"Restore previous session" enabled.')
 
         new_tab()
         navigate(url_first)
