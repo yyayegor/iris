@@ -22,9 +22,9 @@ class Test(BaseTest):
         devtools_label_pattern = Pattern('devtools_regular_label.png')
         run_button_pattern = Pattern('run_button.png')
         restart_firefox_button_pattern = Pattern('restart_firefox_button.png')
-        mozilla_crash_reporter_label_pattern = Pattern('mozilla_crash_reporter_label.png')
         soap_wikipedia_header_label_pattern = Pattern('soap_wikipedia_header_label.png')
         accept_the_risk_button_pattern = Pattern('accept_the_risk_button.png')
+        crash_reporter_icon_pattern = Pattern('crash_reporter_icon.png')
 
         restart_firefox(self,
                         self.browser.path,
@@ -59,6 +59,9 @@ class Test(BaseTest):
         devtools_label_exists = exists(devtools_label_pattern, 20)
         assert_true(self, devtools_label_exists, 'Devtools exists.')
 
+        if Settings.is_windows():
+            click(devtools_label_pattern)
+
         double_click(devtools_label_pattern)
         type(Key.F4, KeyModifier.SHIFT)
 
@@ -69,16 +72,18 @@ class Test(BaseTest):
               'ctypes.cast(zero, ctypes.PointerType(ctypes.int32_t)); badptr.contents;')
         click(run_button_pattern)
 
+        if Settings.is_windows():
+            crash_reporter_icon_exists = exists(crash_reporter_icon_pattern, 15)
+            assert_true(self, crash_reporter_icon_exists, 'Crash Reporter icon exists')
+            click(crash_reporter_icon_pattern)
+
         firefox_crashed = exists(restart_firefox_button_pattern, 10)
         assert_true(self, firefox_crashed, 'Firefox crashed.')
 
         click(restart_firefox_button_pattern)
 
-        mozilla_crash_reporter_label_exists = exists(mozilla_crash_reporter_label_pattern, 10)
-        assert_true(self, mozilla_crash_reporter_label_exists, 'Crash report windows exists.')
-
         try:
-            crash_report_dismissed = wait_vanish(mozilla_crash_reporter_label_pattern, 10)
+            crash_report_dismissed = wait_vanish(restart_firefox_button_pattern, 10)
             assert_true(self, crash_report_dismissed, 'Crash report dismissed')
         except FindError:
             raise FindError('Crash report is not dismissed')
