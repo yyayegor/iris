@@ -18,7 +18,6 @@ class Test(BaseTest):
     def setup(self):
         BaseTest.setup(self)
         self.profile = Profile.LIKE_NEW
-
         return
 
     def run(self):
@@ -43,6 +42,7 @@ class Test(BaseTest):
             click(see_how_it_works_button_pattern)
         else:
             raise FindError('Can not find the "See how it works" button')
+
         new_firefox_content_blocking_label_displayed = exists(new_firefox_content_blocking_label_pattern, 5)
         assert_true(self, new_firefox_content_blocking_label_displayed,
                     'The "See how it works" was successfully clicked')
@@ -52,6 +52,7 @@ class Test(BaseTest):
             click(next_button_first_tour_step_pattern)
         else:
             raise FindError('Can not find the "Next" button on the first tour step')
+
         differences_to_expect_label_displayed = exists(differences_to_expect_label_pattern, 5)
         assert_true(self, differences_to_expect_label_displayed, 'The first step of tour is successfully passed')
 
@@ -60,6 +61,7 @@ class Test(BaseTest):
             click(next_button_second_tour_step_pattern)
         else:
             raise FindError('Can not find the "Next" button on the second tour step')
+
         turn_off_blocking_label_displayed = exists(turn_off_blocking_label_pattern, 5)
         assert_true(self, turn_off_blocking_label_displayed, 'The second step of tour is successfully passed')
 
@@ -68,7 +70,9 @@ class Test(BaseTest):
             click(got_it_button_pattern)
         else:
             raise FindError('Can not find the "Got it!" button')
+
         restart_tour_button_displayed = exists(restart_tour_button_pattern, 5)
         assert_true(self, restart_tour_button_displayed, 'The tracking protection tour is successfully finished')
+
         close_window()
 
