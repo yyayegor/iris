@@ -54,7 +54,7 @@ class Test(BaseTest):
         preference_name_label_exists = exists(preference_name_label_pattern, 5)
         assert_true(self, preference_name_label_exists, 'Settings is opened.')
 
-        type('devtools.chrome.enabled')
+        paste('devtools.chrome.enabled')
 
         devtools_label_exists = exists(devtools_label_pattern, 20)
         assert_true(self, devtools_label_exists, 'Devtools exists.')
