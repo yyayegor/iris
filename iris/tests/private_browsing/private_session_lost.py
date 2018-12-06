@@ -14,31 +14,7 @@ class Test(BaseTest):
         self.test_case_id = '107721'
         self.test_suite_id = '1826'
         self.locales = ['en-US']
-
-    def setup(self):
-        """ Test case setup
-        This overrides the setup method in the BaseTest class,
-        so that it can use a profile that already has bookmarks.
-        """
-
-        BaseTest.setup(self)
-        self.profile = Profile.BRAND_NEW
-
-        '''
-        1        Launch Firefox with a clean profile.        
-        Expected result: Firefox successfully launches.
-        
-        2        Open a new private browsing session.        
-        Expected result: A new private browsing session is started.
-        
-        3        Open the Browser Console (Ctrl+Shift+J).       
-        Expected result: The Browser Console is successfully opened.
-        
-        4        Use the Ctrl+Alt+R combination while the Browser Console is in focus.        
-        Expected result: 
-        - Firefox successfully restarts. 
-        - The private browsing session is not restored.
-        '''
+        self.profile = Profile.LIKE_NEW
 
     def run(self):
 
