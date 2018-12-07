@@ -72,7 +72,7 @@ class Test(BaseTest):
 
         if Settings.is_windows():
             crash_reporter_icon_pattern = Pattern('crash_reporter_icon.png')
-            crash_reporter_icon_exists = exists(crash_reporter_icon_pattern, 15)
+            crash_reporter_icon_exists = exists(crash_reporter_icon_pattern, 180)
             assert_true(self, crash_reporter_icon_exists, 'Crash Reporter icon exists')
             click(crash_reporter_icon_pattern)
 
@@ -82,7 +82,7 @@ class Test(BaseTest):
         click(restart_firefox_button_pattern)
 
         try:
-            crash_report_dismissed = wait_vanish(restart_firefox_button_pattern, 10)
+            crash_report_dismissed = wait_vanish(restart_firefox_button_pattern, 180)
             assert_true(self, crash_report_dismissed, 'Crash report dismissed')
         except FindError:
             raise FindError('Crash report is not dismissed')
