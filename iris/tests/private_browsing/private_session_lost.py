@@ -15,16 +15,6 @@ class Test(BaseTest):
         self.test_suite_id = '1826'
         self.locales = ['en-US']
 
-    def setup(self):
-        """Test case setup
-
-        This overrides the setup method in the BaseTest class, so that it can use a brand new profile.
-        """
-        BaseTest.setup(self)
-        self.profile = Profile.LIKE_NEW
-
-        return
-
     def run(self):
 
         private_browsing_pattern = Pattern('private_browsing.png')
@@ -33,7 +23,8 @@ class Test(BaseTest):
 
         new_private_window()
         private_window_is_loaded = exists(private_browsing_pattern, 20)
-        assert_true(self, private_window_is_loaded, 'Private windows is loaded')
+        assert_true(self, private_window_is_loaded,
+                    'Private windows is loaded')
 
         if Settings.get_os() == Platform.MAC:
             type(text='j', modifier=KeyModifier.CMD + KeyModifier.SHIFT)
@@ -54,7 +45,7 @@ class Test(BaseTest):
         try:
             private_mozilla_closed = wait_vanish(private_window_inactive_pattern, 20)
             assert_true(self, private_mozilla_closed,
-                         'Private browsing session is not restored.')
+                        'Private browsing session is not restored.')
         except FindError:
             raise FindError('Private browser windows was not closed')
 
@@ -69,6 +60,6 @@ class Test(BaseTest):
         try:
             browser_console_closed = wait_vanish(browser_console_title_pattern, 20)
             assert_true(self, browser_console_closed,
-                         'Browser console was closed successfully')
+                        'Exiting test. Browser console was closed successfully')
         except FindError:
             raise FindError('Browser console was not closed')
