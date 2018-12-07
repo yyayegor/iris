@@ -15,11 +15,6 @@ class Test(BaseTest):
         self.test_suite_id = '1826'
         self.locales = ['en-US']
 
-    def setup(self):
-        BaseTest.setup(self)
-        self.profile = Profile.LIKE_NEW
-        return
-
     def run(self):
         privacy_prefs_page_pattern = Pattern('about_preferences_privacy_address.png')
         always_block_trackers_not_selected_pattern = Pattern('always_block_trackers_not_selected.png')
