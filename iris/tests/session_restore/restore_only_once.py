@@ -15,8 +15,6 @@ class Test(BaseTest):
         self.locales = ['en-US']
 
     def run(self):
-        url_first = LocalWeb.FIREFOX_TEST_SITE
-        url_second = LocalWeb.FIREFOX_TEST_SITE_2
         accept_risk_pattern = Pattern('accept_risk.png')
         false_value_no_highlight_pattern = Pattern('false_value_no_highlight.png')
         true_value_highlight_pattern = Pattern('true_value_highlight.png')
@@ -43,12 +41,12 @@ class Test(BaseTest):
                     'preference has changed.')
 
         new_tab()
-        navigate(url_first)
-        website_one_loaded = exists(LocalWeb.FIREFOX_LOGO, 10)
+        navigate(LocalWeb.MOZILLA_TEST_SITE)
+        website_one_loaded = exists(LocalWeb.MOZILLA_LOGO, 10)
         assert_true(self, website_one_loaded,
                     'Page 1 successfully loaded, firefox logo found.')
         new_tab()
-        navigate(url_second)
+        navigate(LocalWeb.FIREFOX_TEST_SITE)
         website_two_loaded = exists(LocalWeb.FIREFOX_LOGO, 10)
         assert_true(self, website_two_loaded,
                     'Page 2 successfully loaded, firefox logo found.')
@@ -63,7 +61,7 @@ class Test(BaseTest):
         assert_true(self, website_one_loaded,
                     'Page 1 successfully loaded after restart.')
         previous_tab()
-        website_two_loaded = exists(LocalWeb.FIREFOX_LOGO, 10)
+        website_two_loaded = exists(LocalWeb.MOZILLA_LOGO, 10)
         assert_true(self, website_two_loaded,
                     'Page 2 successfully loaded after restart.')
         restart_firefox(self,
@@ -76,6 +74,6 @@ class Test(BaseTest):
         assert_false(self, website_one_loaded,
                      'Page 1 was not loaded after second restart.')
         previous_tab()
-        website_two_loaded = exists(LocalWeb.FIREFOX_LOGO, 1)
+        website_two_loaded = exists(LocalWeb.MOZILLA_LOGO, 1)
         assert_false(self, website_two_loaded,
                      'Page 2 was not loaded after second restart.')
