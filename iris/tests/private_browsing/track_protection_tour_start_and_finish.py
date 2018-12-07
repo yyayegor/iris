@@ -15,11 +15,6 @@ class Test(BaseTest):
         self.test_suite_id = '1826'
         self.locales = ['en-US']
 
-    def setup(self):
-        BaseTest.setup(self)
-        self.profile = Profile.LIKE_NEW
-        return
-
     def run(self):
         private_browsing_tab_logo_pattern = Pattern('private_browsing_tab_logo.png')
         see_how_it_works_button_pattern = Pattern('see_how_it_works_button.png')
@@ -75,4 +70,3 @@ class Test(BaseTest):
         assert_true(self, restart_tour_button_displayed, 'The tracking protection tour is successfully finished')
 
         close_window()
-
