@@ -18,9 +18,9 @@ class Test(BaseTest):
     def run(self):
         private_browsing_pattern = Pattern('private_browsing_icon.png')
         change_master_password_popup_pattern = Pattern('change_master_password_popup.png')
-        preferences_privacy_find_field_pattern = Pattern('preferences_privacy_find_field.png')
-        master_password_box_is_checked_pattern = Pattern('master_password_box_is_checked.png')  # .similar(0.8)
-        master_password_box_is_unchecked_pattern = Pattern('master_password_box_is_unchecked.png')  # .similar(0.8)
+        preferences_privacy_find_field_pattern = Pattern('preferences_privacy_find_field.png').similar(0.6)
+        master_password_box_is_checked_pattern = Pattern('master_password_box_is_checked.png')
+        master_password_box_is_unchecked_pattern = Pattern('master_password_box_is_unchecked.png')
         ok_button_available_in_change_master_password_pattern = \
             Pattern('ok_button_available_in_change_master_password.png')
         button_ok_password_change_succeeded_pattern = Pattern('button_ok_password_change_succeeded.png')
