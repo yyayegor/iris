@@ -35,19 +35,19 @@ class Test(BaseTest):
         private_window_is_loaded = exists(private_browsing_pattern, 20)
         assert_true(self, private_window_is_loaded, 'Private windows is loaded')
 
-        if Platform.MAC:
-            type('j', modifier=KeyModifier.CMD + KeyModifier.SHIFT)
+        if Settings.get_os() == Platform.MAC:
+            type(text='j', modifier=KeyModifier.CMD + KeyModifier.SHIFT)
         else:
-            type('j', modifier=KeyModifier.CTRL + KeyModifier.SHIFT)
+            type(text='j', modifier=KeyModifier.CTRL + KeyModifier.SHIFT)
 
         browser_console_opened = exists(browser_console_title_pattern, 20)
         assert_true(self, browser_console_opened,
                     'Browser Console is successfully opened. Browser Console is in focus. Restarting Firefox')
 
-        if Platform.MAC:
-            type('r', modifier=KeyModifier.CMD + KeyModifier.ALT)
+        if Settings.get_os() == Platform.MAC:
+            type(text='r', modifier=KeyModifier.CMD + KeyModifier.ALT)
         else:
-            type('r', modifier=KeyModifier.CTRL + KeyModifier.ALT)
+            type(text='r', modifier=KeyModifier.CTRL + KeyModifier.ALT)
 
         wait_for_firefox_restart()
 
@@ -61,10 +61,10 @@ class Test(BaseTest):
         browser_console_active = exists(browser_console_title_pattern, 40)
         assert_true(self, browser_console_active,
                     'Browser Console is active. Closing Browser Console')
-        if Platform.MAC:
-            type('w', modifier=KeyModifier.CMD)
+        if Settings.get_os() == Platform.MAC:
+            type(text='w', modifier=KeyModifier.CMD)
         else:
-            type(Key.F4, modifier=KeyModifier.ALT)
+            type(text=Key.F4, modifier=KeyModifier.ALT)
 
         try:
             browser_console_closed = wait_vanish(browser_console_title_pattern, 20)
