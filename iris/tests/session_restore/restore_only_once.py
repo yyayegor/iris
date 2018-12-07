@@ -4,6 +4,7 @@
 
 from iris.test_case import *
 
+
 class Test(BaseTest):
 
     def __init__(self):
@@ -13,43 +14,6 @@ class Test(BaseTest):
         self.test_suite_id = '68'
         self.locales = ['en-US']
 
-    def setup(self):
-        """Test case setup
-
-        This overrides the setup method in the BaseTest class, so that it can use a brand new profile.
-        """
-        BaseTest.setup(self)
-        self.profile = Profile.LIKE_NEW
-
-        return
-
-        '''
-        "1        Launch Firefox with a clean profile.        
-        Expected result: Firefox starts successfully.
-        
-        2        Access the about:config page.        
-        Expected result: The about:config page is successfully displayed.
-        
-        3        Set browser.sessionstore.resume_session_once to true.        
-        Expected result: The pref is successfully changed.
-        
-        4        Open several websites in different tabs and then close Firefox.        
-        Expected result: No issues are encountered while performing this action.
-        Firefox successfully closes.
-        
-        5        Launch Firefox with the same profile.        
-        Expected result: 
-        - Firefox launches successfully.
-        - The previously opened tabs are display without issues.
-        
-        6        Close Firefox.        
-        Expected result: Firefox successfully closes.
-        
-        7        Launch Firefox with the same profile.        
-        Expected result: 
-        - Firefox launches successfully. 
-        - The previously opened tabs are not displayed/restored."
-        '''
     def run(self):
         url_first = LocalWeb.FIREFOX_TEST_SITE
         url_second = LocalWeb.FIREFOX_TEST_SITE_2
@@ -110,8 +74,8 @@ class Test(BaseTest):
         previous_tab()
         website_one_loaded = exists(LocalWeb.FIREFOX_LOGO, 1)
         assert_false(self, website_one_loaded,
-                    'Page 1 was not loaded after second restart.')
+                     'Page 1 was not loaded after second restart.')
         previous_tab()
         website_two_loaded = exists(LocalWeb.FIREFOX_LOGO, 1)
         assert_false(self, website_two_loaded,
-                    'Page 2 was not loaded after second restart.')
+                     'Page 2 was not loaded after second restart.')
