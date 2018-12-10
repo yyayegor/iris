@@ -7,14 +7,17 @@ from iris.api.core.pattern import Pattern
 
 class DownloadManager(object):
     SHOW_ALL_DOWNLOADS = Pattern('downloadsHistory_show_all_Downloads.png')
+    DOWNLOADS_FOLDER = Pattern('downloads_folder.png')
 
     class DownloadsPanel(object):
-        DOWNLOADS_BUTTON = Pattern('downloads_button_open.png')
+        DOWNLOADS_BUTTON = Pattern('downloads_button_open.png').similar(0.95)
         DOWNLOAD_RETRY = Pattern('downloadRetry.png')
         DOWNLOAD_RETRY_HIGHLIGHTED = Pattern('downloadRetry_highlighted.png')
         DOWNLOAD_CANCEL = Pattern('downloadCancel.png')
         DOWNLOAD_CANCEL_HIGHLIGHTED = Pattern('downloadCancel_highlighted.png')
         NO_DOWNLOADS_FOR_THIS_SESSION = Pattern('emptyDownloads.png')
+        OPEN_CONTAINING_FOLDER = Pattern('open_containing_folder.png')
+        SMALL_SIZE_FILE_DOWNLOADED = Pattern('5MB_downloaded.png')
 
     class Downloads(object):
         SHOW_DOWNLOADS_FOLDER = Pattern('appMenu-library-downloads-show-button_show_downloads_folder.png')
