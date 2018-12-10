@@ -16,33 +16,27 @@ class Test(BaseTest):
         self.locales = ['en-US']
 
     def run(self):
-        local_url = LocalWeb.FIREFOX_TEST_SITE
-        local_url_tab_icon_pattern = Pattern('firefox_local_tab_icon.png')
-
-        opened_tab_x = []
+        local_url = [LocalWeb.FIREFOX_TEST_SITE, LocalWeb.FIREFOX_TEST_SITE_2, LocalWeb.FOCUS_TEST_SITE,
+                     LocalWeb.FOCUS_TEST_SITE_2, LocalWeb.MOZILLA_TEST_SITE]
+        local_url_logo_pattern = [LocalWeb.FIREFOX_LOGO, LocalWeb.FIREFOX_LOGO, LocalWeb.FOCUS_LOGO,
+                                  LocalWeb.FOCUS_LOGO, LocalWeb.MOZILLA_LOGO]
+        opened_tabs = 0
         for _ in range(5):
             new_tab()
-            navigate(local_url)
-            website_loaded = exists(LocalWeb.FIREFOX_LOGO, 20)
+            navigate(local_url[_])
+            website_loaded = exists(local_url_logo_pattern[_], 20)
             assert_true(self, website_loaded,
                         'Website {0} loaded'
-                        .format(_+1))
-            new_x = find(local_url_tab_icon_pattern).x
-            opened_tab_x.append(new_x)
-
+                        .format(_ + 1))
+            opened_tabs += 1
         [close_tab() for _ in range(4)]
-        one_tab_exists = exists(LocalWeb.FIREFOX_LOGO, 20)
+        one_tab_exists = exists(local_url_logo_pattern[0], 20)
         assert_true(self, one_tab_exists,
-                    '{0} Tabs closed. One opened tab exists.'
-                    .format(len(opened_tab_x) - 1))
-        i = 0
-        for tab_x in opened_tab_x[1:]:  # skip first tab_x, which is opened
+                    'One opened tab left. {0} tabs were successfully closed.'
+                    .format(opened_tabs - 1))
+        for _ in range(4):
             undo_close_tab()
-            tab_is_restored = exists(local_url_tab_icon_pattern)
-            tab_is_restored_x = find(local_url_tab_icon_pattern).x
+            tab_is_restored = exists(local_url_logo_pattern[_+1])  # +1 as the first url logo is one opened tab
             assert_true(self, tab_is_restored,
                         'Tab {0} successfully restored'
-                        .format(i+2))
-            assert_true(self, tab_x == tab_is_restored_x,
-                        'Tab was correctly restored at previous position.')
-            i += 1
+                        .format(_ + 2))
