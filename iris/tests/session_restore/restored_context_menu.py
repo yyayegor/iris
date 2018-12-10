@@ -33,7 +33,8 @@ class Test(BaseTest):
                     'Second tab is successfully loaded.')
         close_tab()
         try:
-            wait_vanish(logo_patterns[1], 3)
+            second_tab_closed = wait_vanish(logo_patterns[1], 3)
+            assert_true(self, second_tab_closed, 'Second tab successfully closed.')
         except FindError:
             raise FindError('Second tab is still open')
         first_tab_is_active = exists(firefox_local_tab_pattern, 20)
