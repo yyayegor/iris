@@ -30,8 +30,11 @@ class Test(BaseTest):
         assert_true(self, first_label_exists, 'Page loaded')
 
         right_click(first_label_pattern)
-        type(Key.DOWN)
-        type(Key.ENTER)
+        if Settings.is_linux():
+            type('t')
+        else:
+            type(Key.DOWN)
+            type(Key.ENTER)
 
         blocked_media_icon_exists = exists(blocked_media_icon_pattern, 10)
         assert_true(self, blocked_media_icon_exists, 'Blocked media tab opened')
@@ -39,8 +42,11 @@ class Test(BaseTest):
         second_label_exists = exists(second_label_pattern, 5)
         assert_true(self, second_label_exists, 'Second link exists')
         right_click(second_label_pattern)
-        type(Key.DOWN)
-        type(Key.ENTER)
+        if Settings.is_linux():
+            type('t')
+        else:
+            type(Key.DOWN)
+            type(Key.ENTER)
 
         new_tab()
         navigate('https://videos.cdn.mozilla.net/uploads/Web_Developer_Tools_in_Firefox_Aurora_10.webm')
