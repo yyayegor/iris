@@ -17,7 +17,7 @@ class Test(BaseTest):
 
     def run(self):
         local_url = LocalWeb.FIREFOX_TEST_SITE
-        local_url_tab_icon_pattern = Pattern('local_url_tab_icon.png')
+        local_url_tab_icon_pattern = Pattern('firefox_local_tab_icon.png')
 
         opened_tab_x = []
         for _ in range(5):
