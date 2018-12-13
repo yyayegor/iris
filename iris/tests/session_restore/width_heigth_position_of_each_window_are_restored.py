@@ -12,7 +12,6 @@ class Test(BaseTest):
         self.locales = ['en-US']
 
     def run(self):
-
         firefox_test_site_tab_pattern = Pattern("firefox_test_site_tab.png")
         focus_test_site_tab_pattern = Pattern("focus_test_site_tab.png")
         iris_pattern = Pattern("iris_tab.png")
@@ -35,13 +34,22 @@ class Test(BaseTest):
         assert_true(self, tab_two_loaded, "Second tab loaded")
 
         minimize_window()
-
+        open_browser_console()
+        type("window.resizeTo(1900, 400)")
+        type(Key.ENTER)
+        # type(text=Key.F4, modifier=Key.ALT)
+        # close_window()
+        click_window_control("close")
         tab_two_location = image_search(focus_test_site_tab_pattern)
 
         tab_two_drop_location = Location(x=0,
                                          y=(tab_two_location.y + SCREEN_HEIGHT / 5))
 
         drag_drop(tab_two_location, tab_two_drop_location)
+        open_browser_console()
+        type("window.resizeTo(600, 400)")
+        type(Key.ENTER)
+        click_window_control("close")
 
         exists(focus_test_site_tab_pattern)
         tab_two_new_location = image_search(focus_test_site_tab_pattern)
@@ -52,6 +60,15 @@ class Test(BaseTest):
                                          y=(tab_one_location.y + SCREEN_HEIGHT / 10))
 
         drag_drop(tab_one_location, tab_one_drop_location, duration=0.5)
+        open_browser_console()
+        type("window.resizeTo(500, 500)")
+        type(Key.ENTER)
+        click_window_control("close")
+
+        exists(firefox_test_site_tab_pattern)
+        tab_two_intermediate_location = image_search(firefox_test_site_tab_pattern)
+        drag_drop(tab_two_intermediate_location, tab_one_drop_location, duration=0.5)
+
         tab_one_window_region = Region(tab_one_drop_location.x,
                                        tab_one_drop_location.y,
                                        width=SCREEN_WIDTH,
@@ -83,6 +100,13 @@ class Test(BaseTest):
         exists(focus_test_site_tab_pattern)
 
         firefox_test_site_restored_position = image_search(firefox_test_site_tab_pattern)
+        click(firefox_test_site_restored_position, duration=1)
+
+        open_browser_console()
+        type("window.innerHeight")
+        type(Key.ENTER)
+        click_window_control("close")
+
         firefox_test_site_restored_coordinates = (firefox_test_site_restored_position.x,
                                                   firefox_test_site_restored_position.y)
         firefox_test_site_old_coordinates = (tab_one_new_location.x,
