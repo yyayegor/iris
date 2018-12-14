@@ -14,10 +14,16 @@ class Test(BaseTest):
     def run(self):
         firefox_test_site_tab_pattern = Pattern("firefox_test_site_tab.png")
         focus_test_site_tab_pattern = Pattern("focus_test_site_tab.png")
+        focus_test_site_tab_pattern.similarity = 0.95
         iris_pattern = Pattern("iris_tab.png")
         hamburger_menu_button_pattern = Pattern("hamburger_menu_button.png")
         hamburger_menu_quit_item_pattern = Pattern("hamburger_menu_quit_item.png")
         restore_previous_session_pattern = Pattern("restore_previous_session_item.png")
+        console_output_height_500 = Pattern("console_output_height_500.png")
+        console_output_width_500 = Pattern("console_output_width_500.png")
+        console_output_height_400 = Pattern("console_output_height_400.png")
+        console_output_width_600 = Pattern("console_output_width_600.png")
+        console_output_width_1000 = Pattern("console_output_width_1000.png")
 
         change_preference("devtools.chrome.enabled", True)
 
@@ -35,11 +41,14 @@ class Test(BaseTest):
 
         minimize_window()
         open_browser_console()
-        type("window.resizeTo(1900, 400)")
+        type("window.resizeTo(1000, 400)", interval=0.02)
         type(Key.ENTER)
-        # type(text=Key.F4, modifier=Key.ALT)
-        # close_window()
         click_window_control("close")
+        default_tabs_position = image_search(focus_test_site_tab_pattern)
+        default_tabs_region = Region(0,
+                                     default_tabs_position.y,
+                                     width=SCREEN_WIDTH,
+                                     height=SCREEN_HEIGHT / 10)
         tab_two_location = image_search(focus_test_site_tab_pattern)
 
         tab_two_drop_location = Location(x=0,
@@ -47,11 +56,12 @@ class Test(BaseTest):
 
         drag_drop(tab_two_location, tab_two_drop_location)
         open_browser_console()
-        type("window.resizeTo(600, 400)")
+        type("window.resizeTo(600, 400)", interval=0.02)
         type(Key.ENTER)
         click_window_control("close")
 
-        exists(focus_test_site_tab_pattern)
+        tab_two_relocated = not exists(focus_test_site_tab_pattern, in_region=default_tabs_region)
+        assert_true(self, tab_two_relocated, "Second opened tab relocated")
         tab_two_new_location = image_search(focus_test_site_tab_pattern)
 
         tab_one_location = image_search(firefox_test_site_tab_pattern)
@@ -61,36 +71,40 @@ class Test(BaseTest):
 
         drag_drop(tab_one_location, tab_one_drop_location, duration=0.5)
         open_browser_console()
-        type("window.resizeTo(500, 500)")
+        type("window.resizeTo(500, 500)", interval=0.02)
         type(Key.ENTER)
         click_window_control("close")
+        tab_one_drop_location.offset(SCREEN_WIDTH / 10, SCREEN_HEIGHT / 10)
 
         exists(firefox_test_site_tab_pattern)
-        tab_two_intermediate_location = image_search(firefox_test_site_tab_pattern)
-        drag_drop(tab_two_intermediate_location, tab_one_drop_location, duration=0.5)
+        tab_one_intermediate_location = image_search(firefox_test_site_tab_pattern)
+        drag_drop(tab_one_intermediate_location, tab_one_drop_location, duration=0.5)
 
-        tab_one_window_region = Region(tab_one_drop_location.x,
+        tab_one_relocated = not exists(firefox_test_site_tab_pattern, in_region=default_tabs_region)
+        assert_true(self, tab_one_relocated, "First opened tab relocated")
+        tab_one_window_region = Region(0,
                                        tab_one_drop_location.y,
                                        width=SCREEN_WIDTH,
                                        height=SCREEN_HEIGHT / 5)
         exists(firefox_test_site_tab_pattern)
         tab_one_new_location = image_search(firefox_test_site_tab_pattern)
         tab_one_drop_location.left(tab_one_location.x)
-        exists(iris_pattern)
+
         first_window_tab = image_search(iris_pattern)
+
         hamburger_menu = image_search(hamburger_menu_button_pattern, region=tab_one_window_region)
         click(hamburger_menu)
         exists(hamburger_menu_quit_item_pattern, )
         exit_item = find(hamburger_menu_quit_item_pattern, )
         click(exit_item, duration=1)
 
-        args = ['-width 400', '-height 400']
         restart_firefox(self,
                         self.browser.path,
                         self.profile_path,
-                        self.base_local_web_url,
-                        args=args)
-        exists(hamburger_menu_button_pattern)
+                        self.base_local_web_url, )
+
+        firefox_restarted = exists(hamburger_menu_button_pattern)
+        assert_true(self, firefox_restarted, "Firefox restarted")
         hamburger_menu_new_window = find(hamburger_menu_button_pattern)
         click(hamburger_menu_new_window)
         exists(restore_previous_session_pattern)
@@ -100,12 +114,6 @@ class Test(BaseTest):
         exists(focus_test_site_tab_pattern)
 
         firefox_test_site_restored_position = image_search(firefox_test_site_tab_pattern)
-        click(firefox_test_site_restored_position, duration=1)
-
-        open_browser_console()
-        type("window.innerHeight")
-        type(Key.ENTER)
-        click_window_control("close")
 
         firefox_test_site_restored_coordinates = (firefox_test_site_restored_position.x,
                                                   firefox_test_site_restored_position.y)
@@ -135,6 +143,46 @@ class Test(BaseTest):
                      iris_tab_restored_coordinates,
                      iris_tab_old_coordinates,
                      "Default iris tab position matched")
+
+        click(firefox_test_site_restored_position, duration=1)
+        open_browser_console()
+        type("window.innerHeight", interval=0.02)
+        type(Key.ENTER)
+        test_site_window_height_matched = exists(console_output_height_500)
+
+        type("window.innerWidth", interval=0.02)
+        type(Key.ENTER)
+        test_site_window_width_matched = exists(console_output_width_500)
+        assert_true(self,
+                    test_site_window_width_matched and test_site_window_height_matched,
+                    "First window size matched")
+        click_window_control("close")
+
+        click(focus_site_restored_position, duration=1)
+        open_browser_console()
+        type("window.innerHeight", interval=0.02)
+        type(Key.ENTER)
+        focus_site_window_height_matched = exists(console_output_height_400)
+        type("window.innerWidth", interval=0.02)
+        type(Key.ENTER)
+        focus_site_window_width_matched = exists(console_output_width_600)
+        assert_true(self,
+                    focus_site_window_height_matched and focus_site_window_width_matched,
+                    "Second window size matched")
+        click_window_control("close")
+
+        click(iris_tab_restored_position)
+        open_browser_console()
+        type("window.innerHeight", interval=0.02)
+        type(Key.ENTER)
+        iris_window_height_matched = exists(console_output_height_400)
+        type("window.innerWidth", interval=0.02)
+        type(Key.ENTER)
+        iris_window_width_matched = exists(console_output_width_1000)
+        assert_true(self,
+                    iris_window_height_matched and iris_window_width_matched,
+                    "Iris window size matched")
+        click_window_control("close")
 
         close_window()
         close_window()
