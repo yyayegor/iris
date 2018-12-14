@@ -44,12 +44,12 @@ class Test(BaseTest):
         type("window.resizeTo(1000, 400)", interval=0.02)
         type(Key.ENTER)
         click_window_control("close")
-        default_tabs_position = image_search(focus_test_site_tab_pattern)
+        default_tabs_position = find(focus_test_site_tab_pattern)
         default_tabs_region = Region(0,
                                      default_tabs_position.y,
                                      width=SCREEN_WIDTH,
                                      height=SCREEN_HEIGHT / 10)
-        tab_two_location = image_search(focus_test_site_tab_pattern)
+        tab_two_location = find(focus_test_site_tab_pattern)
 
         tab_two_drop_location = Location(x=0,
                                          y=(tab_two_location.y + SCREEN_HEIGHT / 5))
@@ -62,9 +62,9 @@ class Test(BaseTest):
 
         tab_two_relocated = not exists(focus_test_site_tab_pattern, in_region=default_tabs_region)
         assert_true(self, tab_two_relocated, "Second opened tab relocated")
-        tab_two_new_location = image_search(focus_test_site_tab_pattern)
+        tab_two_new_location = find(focus_test_site_tab_pattern)
 
-        tab_one_location = image_search(firefox_test_site_tab_pattern)
+        tab_one_location = find(firefox_test_site_tab_pattern)
 
         tab_one_drop_location = Location(x=(tab_one_location.x + SCREEN_WIDTH / 5),
                                          y=(tab_one_location.y + SCREEN_HEIGHT / 10))
@@ -76,8 +76,8 @@ class Test(BaseTest):
         click_window_control("close")
         tab_one_drop_location.offset(SCREEN_WIDTH / 10, SCREEN_HEIGHT / 10)
 
-        exists(firefox_test_site_tab_pattern)
-        tab_one_intermediate_location = image_search(firefox_test_site_tab_pattern)
+        wait(firefox_test_site_tab_pattern)
+        tab_one_intermediate_location = find(firefox_test_site_tab_pattern)
         drag_drop(tab_one_intermediate_location, tab_one_drop_location, duration=0.5)
 
         tab_one_relocated = not exists(firefox_test_site_tab_pattern, in_region=default_tabs_region)
@@ -86,15 +86,15 @@ class Test(BaseTest):
                                        tab_one_drop_location.y,
                                        width=SCREEN_WIDTH,
                                        height=SCREEN_HEIGHT / 5)
-        exists(firefox_test_site_tab_pattern)
-        tab_one_new_location = image_search(firefox_test_site_tab_pattern)
+        wait(firefox_test_site_tab_pattern)
+        tab_one_new_location = find(firefox_test_site_tab_pattern)
         tab_one_drop_location.left(tab_one_location.x)
 
-        first_window_tab = image_search(iris_pattern)
+        first_window_tab = find(iris_pattern)
 
-        hamburger_menu = image_search(hamburger_menu_button_pattern, region=tab_one_window_region)
+        hamburger_menu = find(hamburger_menu_button_pattern, region=tab_one_window_region)
         click(hamburger_menu)
-        exists(hamburger_menu_quit_item_pattern, )
+        wait(hamburger_menu_quit_item_pattern, )
         exit_item = find(hamburger_menu_quit_item_pattern, )
         click(exit_item, duration=1)
 
@@ -107,13 +107,13 @@ class Test(BaseTest):
         assert_true(self, firefox_restarted, "Firefox restarted")
         hamburger_menu_new_window = find(hamburger_menu_button_pattern)
         click(hamburger_menu_new_window)
-        exists(restore_previous_session_pattern)
+        wait(restore_previous_session_pattern)
         restore_previous_session = find(restore_previous_session_pattern)
 
         click(restore_previous_session)
-        exists(focus_test_site_tab_pattern)
+        wait(focus_test_site_tab_pattern)
 
-        firefox_test_site_restored_position = image_search(firefox_test_site_tab_pattern)
+        firefox_test_site_restored_position = find(firefox_test_site_tab_pattern)
 
         firefox_test_site_restored_coordinates = (firefox_test_site_restored_position.x,
                                                   firefox_test_site_restored_position.y)
@@ -124,7 +124,7 @@ class Test(BaseTest):
                      firefox_test_site_old_coordinates,
                      "First tab position matched")
 
-        focus_site_restored_position = image_search(focus_test_site_tab_pattern)
+        focus_site_restored_position = find(focus_test_site_tab_pattern)
         focus_site_restored_coordinates = (focus_site_restored_position.x,
                                            focus_site_restored_position.y)
         focus_site_old_coordinates = (tab_two_new_location.x,
@@ -134,7 +134,7 @@ class Test(BaseTest):
                      focus_site_old_coordinates,
                      "Second tab position matched")
 
-        iris_tab_restored_position = image_search(iris_pattern)
+        iris_tab_restored_position = find(iris_pattern)
         iris_tab_restored_coordinates = (iris_tab_restored_position.x,
                                          iris_tab_restored_position.y)
         iris_tab_old_coordinates = (first_window_tab.x,
