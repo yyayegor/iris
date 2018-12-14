@@ -16,7 +16,7 @@ class Test(BaseTest):
         focus_test_site_tab_pattern = Pattern("focus_test_site_tab.png")
         focus_test_site_tab_pattern.similarity = 0.95
         iris_pattern = Pattern("iris_tab.png")
-        hamburger_menu_button_pattern = Pattern("hamburger_menu_button.png")
+        hamburger_menu_button_pattern = NavBar.HAMBURGER_MENU
         hamburger_menu_quit_item_pattern = Pattern("hamburger_menu_quit_item.png")
         restore_previous_session_pattern = Pattern("restore_previous_session_item.png")
         console_output_height_500 = Pattern("console_output_height_500.png")
@@ -52,7 +52,7 @@ class Test(BaseTest):
         tab_two_location = find(focus_test_site_tab_pattern)
 
         tab_two_drop_location = Location(x=0,
-                                         y=(tab_two_location.y + SCREEN_HEIGHT / 5))
+                                         y=(tab_two_location.y + 2 * SCREEN_HEIGHT / 5))
 
         drag_drop(tab_two_location, tab_two_drop_location)
         open_browser_console()
@@ -76,7 +76,8 @@ class Test(BaseTest):
         click_window_control("close")
         tab_one_drop_location.offset(SCREEN_WIDTH / 10, SCREEN_HEIGHT / 10)
 
-        wait(firefox_test_site_tab_pattern)
+        tab_one_moved = exists(firefox_test_site_tab_pattern)
+        assert_true(self, tab_one_moved, "First tab's first relocation completed")
         tab_one_intermediate_location = find(firefox_test_site_tab_pattern)
         drag_drop(tab_one_intermediate_location, tab_one_drop_location, duration=0.5)
 
@@ -86,7 +87,9 @@ class Test(BaseTest):
                                        tab_one_drop_location.y,
                                        width=SCREEN_WIDTH,
                                        height=SCREEN_HEIGHT / 5)
-        wait(firefox_test_site_tab_pattern)
+
+        tab_one_moved_twice = exists(firefox_test_site_tab_pattern)
+        assert_true(self, tab_one_moved_twice, "First tab window moved")
         tab_one_new_location = find(firefox_test_site_tab_pattern)
         tab_one_drop_location.left(tab_one_location.x)
 
@@ -94,7 +97,8 @@ class Test(BaseTest):
 
         hamburger_menu = find(hamburger_menu_button_pattern, region=tab_one_window_region)
         click(hamburger_menu)
-        wait(hamburger_menu_quit_item_pattern, )
+        hamburger_menu_displayed = exists(hamburger_menu_quit_item_pattern)
+        assert_true(self, hamburger_menu_displayed, "Hamburger menu displayed")
         exit_item = find(hamburger_menu_quit_item_pattern, )
         click(exit_item, duration=1)
 
@@ -107,11 +111,14 @@ class Test(BaseTest):
         assert_true(self, firefox_restarted, "Firefox restarted")
         hamburger_menu_new_window = find(hamburger_menu_button_pattern)
         click(hamburger_menu_new_window)
-        wait(restore_previous_session_pattern)
+        restore_previous_session_located = exists(restore_previous_session_pattern)
+        assert_true(self, restore_previous_session_located, "'Restore previous session' item located")
         restore_previous_session = find(restore_previous_session_pattern)
 
         click(restore_previous_session)
-        wait(focus_test_site_tab_pattern)
+
+        session_restored = exists(focus_test_site_tab_pattern)
+        assert_true(self, session_restored, "Session restored")
 
         firefox_test_site_restored_position = find(firefox_test_site_tab_pattern)
 
