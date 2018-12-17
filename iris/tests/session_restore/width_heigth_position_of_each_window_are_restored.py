@@ -117,7 +117,7 @@ class Test(BaseTest):
 
         focus_site_restored = exists(focus_test_site_tab_pattern, timeout=10)
         firefox_test_site_restored = exists(firefox_test_site_tab_pattern,
-                                            timeout=10)
+                                            timeout=20)
         assert_true(self,
                     focus_site_restored and firefox_test_site_restored,
                     "Session restored")
