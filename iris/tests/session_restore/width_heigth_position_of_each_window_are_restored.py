@@ -107,7 +107,7 @@ class Test(BaseTest):
                         self.profile_path,
                         self.base_local_web_url, )
 
-        firefox_restarted = exists(hamburger_menu_button_pattern)
+        firefox_restarted = exists(hamburger_menu_button_pattern, timeout=5)
         assert_true(self, firefox_restarted, "Firefox restarted")
         hamburger_menu_new_window = find(hamburger_menu_button_pattern)
         click(hamburger_menu_new_window)
