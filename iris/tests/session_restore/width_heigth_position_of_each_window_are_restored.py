@@ -17,13 +17,14 @@ class Test(BaseTest):
         focus_test_site_tab_pattern.similarity = 0.95
         iris_pattern = Pattern("iris_tab.png")
         hamburger_menu_button_pattern = NavBar.HAMBURGER_MENU
-        hamburger_menu_quit_item_pattern = Pattern("hamburger_menu_quit_item.png")
         restore_previous_session_pattern = Pattern("restore_previous_session_item.png")
         console_output_height_500 = Pattern("console_output_height_500.png")
         console_output_width_500 = Pattern("console_output_width_500.png")
         console_output_height_400 = Pattern("console_output_height_400.png")
         console_output_width_600 = Pattern("console_output_width_600.png")
         console_output_width_1000 = Pattern("console_output_width_1000.png")
+        if not Settings.is_mac():
+            hamburger_menu_quit_item_pattern = Pattern("hamburger_menu_quit_item.png")
 
         change_preference("devtools.chrome.enabled", True)
 
@@ -36,12 +37,12 @@ class Test(BaseTest):
         new_tab()
         navigate(LocalWeb.FOCUS_TEST_SITE)
 
-        tab_two_loaded = exists(focus_test_site_tab_pattern, timeout=10)
+        tab_two_loaded = exists(focus_test_site_tab_pattern, timeout=30)
         assert_true(self, tab_two_loaded, "Second tab loaded")
 
         minimize_window()
         open_browser_console()
-        type("window.resizeTo(1000, 400)", interval=0.02)
+        paste("window.resizeTo(1000, 400)")
         type(Key.ENTER)
         click_window_control("close")
         default_tabs_position = find(focus_test_site_tab_pattern)
@@ -56,13 +57,12 @@ class Test(BaseTest):
 
         drag_drop(tab_two_location, tab_two_drop_location)
         open_browser_console()
-        type("window.resizeTo(600, 400)", interval=0.02)
+        paste("window.resizeTo(600, 400)")
         type(Key.ENTER)
         click_window_control("close")
 
         tab_two_relocated = not exists(focus_test_site_tab_pattern, in_region=default_tabs_region)
         assert_true(self, tab_two_relocated, "Second opened tab relocated")
-        tab_two_new_location = find(focus_test_site_tab_pattern)
 
         tab_one_location = find(firefox_test_site_tab_pattern)
 
@@ -71,10 +71,10 @@ class Test(BaseTest):
 
         drag_drop(tab_one_location, tab_one_drop_location, duration=0.5)
         open_browser_console()
-        type("window.resizeTo(500, 500)", interval=0.02)
+        paste("window.resizeTo(500, 500)")
         type(Key.ENTER)
         click_window_control("close")
-        tab_one_drop_location.offset(SCREEN_WIDTH / 10, SCREEN_HEIGHT / 10)
+        tab_one_drop_location.offset(SCREEN_WIDTH / 10, SCREEN_HEIGHT / 20)
 
         tab_one_moved = exists(firefox_test_site_tab_pattern)
         assert_true(self, tab_one_moved, "First tab's first relocation completed")
@@ -90,17 +90,15 @@ class Test(BaseTest):
 
         tab_one_moved_twice = exists(firefox_test_site_tab_pattern)
         assert_true(self, tab_one_moved_twice, "First tab window moved")
-        tab_one_new_location = find(firefox_test_site_tab_pattern)
         tab_one_drop_location.left(tab_one_location.x)
 
-        first_window_tab = find(iris_pattern)
-
-        hamburger_menu = find(hamburger_menu_button_pattern, region=tab_one_window_region)
-        click(hamburger_menu)
-        hamburger_menu_displayed = exists(hamburger_menu_quit_item_pattern)
-        assert_true(self, hamburger_menu_displayed, "Hamburger menu displayed")
-        exit_item = find(hamburger_menu_quit_item_pattern, )
-        click(exit_item, duration=1)
+        if not Settings.is_mac():
+            hamburger_menu = find(hamburger_menu_button_pattern, region=tab_one_window_region)
+            click(hamburger_menu)
+            hamburger_menu_displayed = exists(hamburger_menu_quit_item_pattern)
+            assert_true(self, hamburger_menu_displayed, "Hamburger menu displayed")
+            exit_item = find(hamburger_menu_quit_item_pattern, )
+            click(exit_item, duration=1)
 
         restart_firefox(self,
                         self.browser.path,
@@ -124,44 +122,38 @@ class Test(BaseTest):
                     focus_site_restored and firefox_test_site_restored,
                     "Session restored")
 
-        firefox_test_site_restored_position = find(firefox_test_site_tab_pattern, )
-
-        firefox_test_site_restored_coordinates = (firefox_test_site_restored_position.x,
-                                                  firefox_test_site_restored_position.y)
-        firefox_test_site_old_coordinates = (tab_one_new_location.x,
-                                             tab_one_new_location.y)
-        assert_equal(self,
-                     firefox_test_site_restored_coordinates,
-                     firefox_test_site_old_coordinates,
-                     "First tab position matched")
+        firefox_test_site_restored_position = find(firefox_test_site_tab_pattern)
 
         focus_site_restored_position = find(focus_test_site_tab_pattern)
-        focus_site_restored_coordinates = (focus_site_restored_position.x,
-                                           focus_site_restored_position.y)
-        focus_site_old_coordinates = (tab_two_new_location.x,
-                                      tab_two_new_location.y)
-        assert_equal(self,
-                     focus_site_restored_coordinates,
-                     focus_site_old_coordinates,
-                     "Second tab position matched")
 
         iris_tab_restored_position = find(iris_pattern)
-        iris_tab_restored_coordinates = (iris_tab_restored_position.x,
-                                         iris_tab_restored_position.y)
-        iris_tab_old_coordinates = (first_window_tab.x,
-                                    first_window_tab.y)
-        assert_equal(self,
-                     iris_tab_restored_coordinates,
-                     iris_tab_old_coordinates,
-                     "Default iris tab position matched")
+
+        firefox_test_site_most_right = firefox_test_site_restored_position.x > max(iris_tab_restored_position.x,
+                                                                                   focus_site_restored_position.x)
+
+        firefox_test_site_middle_heigth = focus_site_restored_position.y > firefox_test_site_restored_position.y \
+                                          > iris_tab_restored_position.y
+
+        focus_site_the_lowest = focus_site_restored_position.y > max(iris_tab_restored_position.y,
+                                                                     firefox_test_site_restored_position.y)
+
+        focus_site_most_left = focus_site_restored_position.x <= iris_tab_restored_position.x
+
+        assert_true(self,
+                    firefox_test_site_most_right and firefox_test_site_middle_heigth,
+                    "First restored window oriented correctly")
+
+        assert_true(self,
+                    focus_site_most_left and focus_site_the_lowest,
+                    "Second restored window oriented correctly")
 
         click(firefox_test_site_restored_position, duration=1)
         open_browser_console()
-        type("window.innerHeight", interval=0.02)
+        paste("window.innerHeight")
         type(Key.ENTER)
         test_site_window_height_matched = exists(console_output_height_500)
 
-        type("window.innerWidth", interval=0.02)
+        paste("window.innerWidth")
         type(Key.ENTER)
         test_site_window_width_matched = exists(console_output_width_500)
         assert_true(self,
@@ -171,10 +163,10 @@ class Test(BaseTest):
 
         click(focus_site_restored_position, duration=1)
         open_browser_console()
-        type("window.innerHeight", interval=0.02)
+        paste("window.innerHeight")
         type(Key.ENTER)
         focus_site_window_height_matched = exists(console_output_height_400)
-        type("window.innerWidth", interval=0.02)
+        paste("window.innerWidth")
         type(Key.ENTER)
         focus_site_window_width_matched = exists(console_output_width_600)
         assert_true(self,
@@ -184,10 +176,10 @@ class Test(BaseTest):
 
         click(iris_tab_restored_position)
         open_browser_console()
-        type("window.innerHeight", interval=0.02)
+        paste("window.innerHeight")
         type(Key.ENTER)
         iris_window_height_matched = exists(console_output_height_400)
-        type("window.innerWidth", interval=0.02)
+        paste("window.innerWidth")
         type(Key.ENTER)
         iris_window_width_matched = exists(console_output_width_1000)
         assert_true(self,
