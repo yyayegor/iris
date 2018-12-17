@@ -36,7 +36,7 @@ class Test(BaseTest):
         new_tab()
         navigate(LocalWeb.FOCUS_TEST_SITE)
 
-        tab_two_loaded = exists(focus_test_site_tab_pattern, timeout=5)
+        tab_two_loaded = exists(focus_test_site_tab_pattern, timeout=10)
         assert_true(self, tab_two_loaded, "Second tab loaded")
 
         minimize_window()
@@ -117,9 +117,9 @@ class Test(BaseTest):
 
         click(restore_previous_session)
 
-        focus_site_restored = exists(focus_test_site_tab_pattern, timeout=5)
+        focus_site_restored = exists(focus_test_site_tab_pattern, timeout=10)
         firefox_test_site_restored = exists(firefox_test_site_tab_pattern,
-                                            timeout=5)
+                                            timeout=10)
         assert_true(self,
                     focus_site_restored and firefox_test_site_restored,
                     "Session restored")
