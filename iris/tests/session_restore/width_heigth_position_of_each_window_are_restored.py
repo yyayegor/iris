@@ -50,25 +50,32 @@ class Test(BaseTest):
         paste("window.resizeTo(1000, 400)")
         type(Key.ENTER)
         click_window_control("close")
+
+        tabs_located_after_size_changed = exists(focus_test_site_tab_pattern)
+        assert_true(self,
+                    tabs_located_after_size_changed,
+                    "Tabs located after unmaximizing")
         default_tabs_position = find(focus_test_site_tab_pattern)
+
         default_tabs_region = Region(0,
                                      default_tabs_position.y,
                                      width=SCREEN_WIDTH,
                                      height=SCREEN_HEIGHT / 10)
-        tab_two_location = find(focus_test_site_tab_pattern)
 
         tab_two_drop_location = Location(x=0,
-                                         y=(tab_two_location.y + 2 * SCREEN_HEIGHT / 5))
+                                         y=(default_tabs_position.y + 2 * SCREEN_HEIGHT / 5))
 
-        drag_drop(tab_two_location, tab_two_drop_location)
+        drag_drop(default_tabs_position, tab_two_drop_location)
         open_browser_console()
         paste("window.resizeTo(600, 400)")
         type(Key.ENTER)
         click_window_control("close")
 
         tab_two_relocated = not exists(focus_test_site_tab_pattern, in_region=default_tabs_region)
-        assert_true(self, tab_two_relocated, "Second opened tab relocated")
-
+        active_tab_switched = exists(firefox_test_site_tab_pattern)
+        assert_true(self,
+                    tab_two_relocated and active_tab_switched,
+                    "Second tab relocated")
         tab_one_location = find(firefox_test_site_tab_pattern)
 
         tab_one_drop_location = Location(x=(tab_one_location.x + SCREEN_WIDTH / 5),
