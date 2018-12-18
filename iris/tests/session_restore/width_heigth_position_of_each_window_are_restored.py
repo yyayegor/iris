@@ -26,6 +26,11 @@ class Test(BaseTest):
         if not Settings.is_mac():
             hamburger_menu_quit_item_pattern = Pattern("hamburger_menu_quit_item.png")
 
+        minimize_window()
+        default_window_location = Location(x=(SCREEN_WIDTH/20), y=(SCREEN_HEIGHT/20))
+        iris_tab_on_start_position = find(iris_pattern)
+        drag_drop(iris_tab_on_start_position, default_window_location)
+        maximize_window()
         change_preference("devtools.chrome.enabled", True)
 
         new_tab()
