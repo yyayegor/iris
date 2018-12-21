@@ -28,7 +28,7 @@ class Test(BaseTest):
                                                       timeout=5)
         assert_true(self, tracking_protection_shield_displayed,
                     "Tracking protection shield displayed")
-        page_loaded = exists(cnn_logo_pattern, timeout=20)
+        page_loaded = exists(cnn_logo_pattern, timeout=30)
         assert_true(self, page_loaded,
                     "Page loaded")
 
