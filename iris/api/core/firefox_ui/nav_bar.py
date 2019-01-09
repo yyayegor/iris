@@ -15,6 +15,7 @@ class NavBar(object):
     SIDEBAR_MENU = Pattern('sidebar_button.png')
     HAMBURGER_MENU = Pattern('panel_ui_menu_button.png')
 
+    # Customized buttons.
     ZOOM_RESET_BUTTON = Pattern('zoom_reset_button_100.png')
     ZOOM_RESET_BUTTON_90 = Pattern('zoom_reset_button_90.png')
     ZOOM_RESET_BUTTON_110 = Pattern('zoom_reset_button_110.png')
@@ -26,3 +27,4 @@ class NavBar(object):
     TOOLBAR = Pattern('toolbar.png')
 
     DOWNLOADS_BUTTON = Pattern('downloads_button.png')
+    DOWNLOADS_BUTTON_BLUE = Pattern('downloads_button_blue.png').similar(0.95)
